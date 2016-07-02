@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>#{empty pageTitle ? 'Publicações' : pageTitle}</title>
+	<h:outputStylesheet name="bootstrap.css" />
+	<h:outputStylesheet name="forge-style.css" />
+</h:head>
+
+<h:body>
+	<ui:debug rendered="#{facesContext.application.projectStage == 'Development'}" />
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container">
+				<h:link id="brandLink" outcome="/index.xhtml" styleClass="brand">
+					<h:outputText value="Bem vindo ao " rendered=" #{request.userPrincipal !=null} "/>
+                    Sistema de Publicações
+				</h:link>
+			</div>
+		</div>
+	</div>
+
+	<div class="container forgecontainer">
+		<div id="navigation">
+			<h:link id="homeLink" outcome="/index.xhtml">
+				<img src='#{resource["logo.png"]}' alt="Forge... get hammered" border="0" />
+			</h:link>
+			<ul>
+				<li>
+					<h:link outcome="/autor/search" value="Autores"/>
+				</li>
+				<li>
+					<h:link outcome="/pais/search" value="Paises"/>
+				</li>
+				<li>
+					<h:link outcome="/publicacao/search" value="Publicacões"/>
+				</li>
+				<li>
+					<h:link outcome="/tipoPublicacao/search" value="Tipos de Publicação"/>
+				</li>
+				<li>
+					<h:link outcome="/usuario/search" value="Usuário"/>
+				</li>
+			</ul>
+		</div>
+
+		<div id="content">
+			<h1>
+				<ui:insert name="header" />
+			</h1>
+			<h2>
+				<ui:insert name="subheader" />
+			</h2>
+
+			<ui:insert name="main" />
+		</div>
+	</div>
+
+	<footer>
+		<div id="footer-wrapper">
+	    	<p>Sistema de publicações @2016</p>
+	    </div>
+	</footer>
+
+</h:body>
+</html>

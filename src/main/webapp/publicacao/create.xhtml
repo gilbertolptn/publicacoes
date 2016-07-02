@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{publicacaoBean.id}'/>
+		<f:event type="preRenderView" listener='#{publicacaoBean.retrieve}'/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Create Publicacao"/>
+
+	<ui:define name="header">
+		Publicacao
+	</ui:define>
+
+	<ui:define name="subheader">
+		<c:choose>
+			<c:when test='#{!empty publicacaoBean.id}'>
+				Edit existing Publicacao
+			</c:when>
+			<c:otherwise>
+				Create a new Publicacao
+			</c:otherwise>
+		</c:choose>
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:form id="create">
+			<h:messages globalOnly="true" styleClass="error"/>
+
+			<h:panelGrid columnClasses="label,component,required" columns="3">
+				<h:outputLabel for="publicacaoBeanPublicacaoStatus" value="Status:"/>
+				<h:panelGroup>
+					<h:inputText id="publicacaoBeanPublicacaoStatus" value="#{publicacaoBean.publicacao.status}"/>
+					<h:message for="publicacaoBeanPublicacaoStatus" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="publicacaoBeanPublicacaoAno" value="Ano:"/>
+				<h:panelGroup>
+					<h:inputText id="publicacaoBeanPublicacaoAno" value="#{publicacaoBean.publicacao.ano}"/>
+					<h:message for="publicacaoBeanPublicacaoAno" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="publicacaoBeanPublicacaoDescricao" value="Descricao:"/>
+				<h:panelGroup>
+					<h:inputText id="publicacaoBeanPublicacaoDescricao" value="#{publicacaoBean.publicacao.descricao}"/>
+					<h:message for="publicacaoBeanPublicacaoDescricao" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="publicacaoBeanPublicacaoAutores" value="Autores:"/>
+				<h:panelGroup>
+					<ui:param name="_collection" value="#{publicacaoBean.publicacao.autores}"/>
+					<h:dataTable id="publicacaoBeanPublicacaoAutores" styleClass="data-table" value="#{_collection}" var="_item">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Nome"/>
+							</f:facet>
+							<h:link outcome="/autor/view">
+								<f:param name="id" value="#{_item.id}"/>
+								<h:outputText id="itemNome" value="#{_item.nome}"/>
+							</h:link>
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Pais"/>
+							</f:facet>
+							<h:link outcome="/autor/view">
+								<f:param name="id" value="#{_item.id}"/>
+								<h:outputText id="forgeviewdisplayitemPais" value="#{forgeview:display(_item.pais)}"/>
+							</h:link>
+						</h:column>
+						<h:column footerClass="remove-column" headerClass="remove-column">
+							<h:commandLink action="#{_collection.remove(_item)}" styleClass="remove-button"/>
+						</h:column>
+					</h:dataTable>
+					<h:panelGrid columnClasses=",remove-column" columns="2" styleClass="data-table-footer">
+						<h:selectOneMenu converter="#{autorBean.converter}" id="publicacaoBeanPublicacaoAutoresSelect" value="#{requestScope['publicacaoBeanPublicacaoAutoresSelect']}">
+							<f:selectItem/>
+							<f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{autorBean.all}" var="_item"/>
+						</h:selectOneMenu>
+						<h:commandLink action="#{_collection.add(requestScope['publicacaoBeanPublicacaoAutoresSelect'])}" id="publicacaoBeanPublicacaoAutoresAdd" onclick="if (document.getElementById(document.forms[0].id+':publicacaoBeanPublicacaoAutoresSelect').selectedIndex &lt; 1) { alert('Must select a Autor'); return false; }" styleClass="add-button"/>
+					</h:panelGrid>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="publicacaoBeanPublicacaoTipoPublicao" value="Tipo Publicao:"/>
+				<h:panelGroup>
+					<h:selectOneMenu converter="#{tipoPublicacaoBean.converter}" id="publicacaoBeanPublicacaoTipoPublicao" value="#{publicacaoBean.publicacao.tipoPublicao}">
+						<f:selectItem/>
+						<f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{tipoPublicacaoBean.all}" var="_item"/>
+					</h:selectOneMenu>
+					<h:message for="publicacaoBeanPublicacaoTipoPublicao" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+			</h:panelGrid>
+
+			<div class="buttons">
+				<h:commandLink value="Salvar" action='#{publicacaoBean.update}' styleClass="btn btn-primary"/>
+				<c:choose>
+					<c:when test='#{!empty publicacaoBean.id}'>
+						<h:link value="Cancelar" outcome="view" styleClass="btn btn-primary">
+							<f:param name="id" value='#{publicacaoBean.id}'/>
+						</h:link>
+						<h:commandLink value="Delete" action='#{publicacaoBean.delete}' styleClass="btn btn-primary"/>
+					</c:when>
+					<c:otherwise>
+						<h:link value="Cancelar" outcome="search" styleClass="btn btn-primary"/>
+					</c:otherwise>
+				</c:choose>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

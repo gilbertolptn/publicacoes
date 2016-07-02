@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="page" value='#{publicacaoBean.page}'/>
+		<f:event type="preRenderView" listener='#{publicacaoBean.paginate}'/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Busca de Publicações"/>
+
+	<ui:define name="header">
+		Publicações
+	</ui:define>
+
+	<ui:define name="subheader">
+		Busca de Publicações
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:form id="search">
+			<f:validateBean disabled="true">
+				<h:panelGroup styleClass="search">
+
+					<h:panelGrid columnClasses="label,component,required" columns="3">
+						<h:outputLabel for="publicacaoBeanExampleStatus" value="Status:"/>
+						<h:panelGroup>
+							<h:inputText id="publicacaoBeanExampleStatus" value="#{publicacaoBean.example.status}"/>
+							<h:message for="publicacaoBeanExampleStatus" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="publicacaoBeanExampleAno" value="Ano:"/>
+						<h:panelGroup>
+							<h:inputText id="publicacaoBeanExampleAno" value="#{publicacaoBean.example.ano}"/>
+							<h:message for="publicacaoBeanExampleAno" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="publicacaoBeanExampleDescricao" value="Descricao:"/>
+						<h:panelGroup>
+							<h:inputText id="publicacaoBeanExampleDescricao" value="#{publicacaoBean.example.descricao}"/>
+							<h:message for="publicacaoBeanExampleDescricao" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="publicacaoBeanExampleTipoPublicao" value="Tipo Publicao:"/>
+						<h:panelGroup>
+							<h:selectOneMenu converter="#{tipoPublicacaoBean.converter}" id="publicacaoBeanExampleTipoPublicao" value="#{publicacaoBean.example.tipoPublicao}">
+								<f:selectItem/>
+								<f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{tipoPublicacaoBean.all}" var="_item"/>
+							</h:selectOneMenu>
+							<h:message for="publicacaoBeanExampleTipoPublicao" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+					</h:panelGrid>
+					<h:panelGroup styleClass="buttons">
+						<h:commandLink value="Pesquisar" action='#{publicacaoBean.search}' styleClass="btn btn-primary"/>
+						<h:commandLink value="Criar novo" action='#{publicacaoBean.create}' styleClass="btn btn-primary"/>
+					</h:panelGroup>
+				</h:panelGroup>
+			</f:validateBean>
+			
+			<h:dataTable id="publicacaoBeanPageItems" styleClass="data-table" value="#{publicacaoBean.pageItems}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Status"/>
+					</f:facet>
+					<h:link outcome="/publicacao/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemStatus" value="#{_item.status}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Ano"/>
+					</f:facet>
+					<h:link outcome="/publicacao/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemAno" value="#{_item.ano}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Descricao"/>
+					</f:facet>
+					<h:link outcome="/publicacao/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemDescricao" value="#{_item.descricao}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo Publicao"/>
+					</f:facet>
+					<h:link outcome="/publicacao/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="forgeviewdisplayitemTipoPublicao" value="#{forgeview:display(_item.tipoPublicao)}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<ui:include src="/resources/scaffold/paginator.xhtml">
+				<ui:param name="paginatorBean" value='#{publicacaoBean}'/>
+			</ui:include>
+		</h:form>
+			
+	</ui:define>
+
+</ui:composition>

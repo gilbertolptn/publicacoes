@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value='#{publicacaoBean.id}'/>
+		<f:event type="preRenderView" listener='#{publicacaoBean.retrieve}'/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="View Publicacao"/>
+
+	<ui:define name="header">
+		Publicacao
+	</ui:define>
+
+	<ui:define name="subheader">
+		View existing Publicacao
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:outputLabel for="publicacaoBeanPublicacaoStatus" value="Status:"/>
+			<h:outputText id="publicacaoBeanPublicacaoStatus" value="#{publicacaoBean.publicacao.status}"/>
+			<h:outputText/>
+			<h:outputLabel for="publicacaoBeanPublicacaoAno" value="Ano:"/>
+			<h:outputText id="publicacaoBeanPublicacaoAno" value="#{publicacaoBean.publicacao.ano}"/>
+			<h:outputText/>
+			<h:outputLabel for="publicacaoBeanPublicacaoDescricao" value="Descricao:"/>
+			<h:outputText id="publicacaoBeanPublicacaoDescricao" value="#{publicacaoBean.publicacao.descricao}"/>
+			<h:outputText/>
+			<h:outputLabel for="publicacaoBeanPublicacaoAutores" value="Autores:"/>
+			<h:dataTable id="publicacaoBeanPublicacaoAutores" styleClass="data-table" value="#{publicacaoBean.publicacao.autores}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Nome"/>
+					</f:facet>
+					<h:link outcome="/autor/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemNome" value="#{_item.nome}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Pais"/>
+					</f:facet>
+					<h:link outcome="/autor/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="forgeviewdisplayitemPais" value="#{forgeview:display(_item.pais)}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<h:outputText/>
+			<h:outputLabel for="publicacaoBeanPublicacaoTipoPublicao" value="Tipo Publicao:"/>
+			<h:link id="publicacaoBeanPublicacaoTipoPublicao" outcome="/tipoPublicacao/view" rendered="#{!empty publicacaoBean.publicacao.tipoPublicao}" value="#{publicacaoBean.publicacao.tipoPublicao}">
+				<f:param name="id" value="#{publicacaoBean.publicacao.tipoPublicao.id}"/>
+			</h:link>
+			<h:outputText/>
+		</h:panelGrid>
+
+		<div class="buttons">
+			<h:link value="View All" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="Edit" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="Criar novo" outcome="create" styleClass="btn btn-primary"/>
+		</div>
+	</ui:define>
+
+</ui:composition>
